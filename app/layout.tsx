@@ -1,21 +1,21 @@
-import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import QueryProvider from "@/providers/QueryProvider";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: "NoteHub",
-  description: "NoteHub application",
-};
-
 export default function RootLayout({
   children,
+  modal,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
+  modal: ReactNode;
 }) {
   return (
     <html lang="en">
       <body>
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          {children}
+          {modal}
+        </QueryProvider>
       </body>
     </html>
   );
