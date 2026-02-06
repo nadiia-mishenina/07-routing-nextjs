@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import Header from "@/components/Header/Header";
-import Footer from "@/components/Footer/Footer";
-import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
+import QueryProvider from "@/providers/QueryProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "NoteHub",
-  description: "Notes app",
+  description: "NoteHub application",
 };
 
 export default function RootLayout({
@@ -17,14 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <TanStackProvider>
-          <Header />
-          {children}
-          <Footer />
-
-          {/* Portal root for Modal */}
-          <div id="modal-root" />
-        </TanStackProvider>
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );

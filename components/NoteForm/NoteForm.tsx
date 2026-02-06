@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import css from "./NoteForm.module.css";
-import { createNote } from "@/lib/api";
+import { createNote } from "@/lib/api/notes";
 import type { NoteTag } from "@/types/note";
 
 export interface NoteFormValues {
@@ -15,7 +15,7 @@ export interface NoteFormValues {
 }
 
 interface NoteFormProps {
-  onCancel?: () => void; 
+  onCancel?: () => void;
 }
 
 const TAGS: NoteTag[] = ["Todo", "Work", "Personal", "Meeting", "Shopping"];
@@ -26,7 +26,9 @@ const validationSchema = Yup.object({
     .max(50, "Title must be at most 50 characters")
     .required("Title is required"),
   content: Yup.string().max(500, "Content must be at most 500 characters"),
-  tag: Yup.mixed<NoteTag>().oneOf(TAGS, "Invalid tag").required("Tag is required"),
+  tag: Yup.mixed<NoteTag>()
+    .oneOf(TAGS, "Invalid tag")
+    .required("Tag is required"),
 });
 
 const initialValues: NoteFormValues = {
@@ -41,8 +43,8 @@ export default function NoteForm({ onCancel }: NoteFormProps) {
   const { mutate, isPending } = useMutation({
     mutationFn: (values: NoteFormValues) => createNote(values),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-      onCancel?.(); 
+      queryClient.invalidateQueries({ queryKey: ["notes"], exact: false });
+      onCancel?.();
     },
   });
 
@@ -96,20 +98,13 @@ export default function NoteForm({ onCancel }: NoteFormProps) {
         </div>
 
         <div className={css.actions}>
-          <button
-            type="button"
-            className={css.cancelButton}
-            onClick={() => onCancel?.()}
-            disabled={!onCancel}
-          >
-            Cancel
-          </button>
+          {onCancel && (
+            <button type="button" className={css.cancelButton} onClick={onCancel}>
+              Cancel
+            </button>
+          )}
 
-          <button
-            type="submit"
-            className={css.submitButton}
-            disabled={isPending}
-          >
+          <button type="submit" className={css.submitButton} disabled={isPending}>
             Create note
           </button>
         </div>
