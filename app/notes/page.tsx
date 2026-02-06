@@ -1,16 +1,22 @@
-import { fetchNotes } from "@/lib/api/notes";
-import NoteList from "@/components/NoteList/NoteList";
-import css from "./NotesPage.module.css";
-
-export const dynamic = "force-dynamic";
+import { fetchNotes } from "@/lib/api";
+import NotesClient from "@/app/notes/filter/[...slug]/Notes.client";
+import { QueryClient, dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export default async function NotesPage() {
-  const notes = await fetchNotes();
+  const queryClient = new QueryClient();
+
+  const currentPage = 1;
+  const searchQuery = "";
+  const tag = undefined; // all notes
+
+  await queryClient.prefetchQuery({
+    queryKey: ["notes", currentPage, searchQuery, tag],
+    queryFn: () => fetchNotes(currentPage, searchQuery, tag),
+  });
 
   return (
-    <main className={css.container}>
-      <h1 className={css.title}>Notes</h1>
-      <NoteList notes={notes} />
-    </main>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <NotesClient />
+    </HydrationBoundary>
   );
 }

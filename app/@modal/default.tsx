@@ -1,4 +1,6 @@
-// app/@modal/default.tsx
-export default function ModalDefault() {
-  return null;
+const ModalPreview = () => {
+
+    return null
 }
+
+export default ModalPreview

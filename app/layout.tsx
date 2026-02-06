@@ -1,21 +1,37 @@
-import type { ReactNode } from "react";
-import QueryProvider from "@/providers/QueryProvider";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
+
+import Header from "@/components/Header/Header";
+import Footer from "@/components/Footer/Footer";
+import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+export const metadata: Metadata = {
+  title: "NoteHub",
+  description: "NoteHub application",
+};
 
 export default function RootLayout({
   children,
   modal,
-}: {
-  children: ReactNode;
-  modal: ReactNode;
-}) {
+}: Readonly<{
+  children: React.ReactNode;
+  modal: React.ReactNode;
+}>) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <body>
-        <QueryProvider>
+        <TanStackProvider>
+          <Header />
           {children}
-          {modal}
-        </QueryProvider>
+          <Footer />
+          <div id="modal-root">{modal}</div>
+        </TanStackProvider>
       </body>
     </html>
   );

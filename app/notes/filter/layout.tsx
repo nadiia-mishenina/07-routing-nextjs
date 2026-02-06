@@ -1,17 +1,19 @@
-import type { ReactNode } from "react";
-import css from "./LayoutNotes.module.css";
-
+import css from './LayoutNotes.module.css'
 
 type Props = {
-  children: ReactNode;
-  sidebar: ReactNode; 
-};
-
-export default function LayoutNotes({ children, sidebar }: Props) {
-  return (
-    <div className={css.wrapper}>
-      <aside className={css.sidebar}>{sidebar}</aside>
-      <main className={css.content}>{children}</main>
-    </div>
-  );
+    children: React.ReactNode;
+    sidebar: React.ReactNode;
 }
+
+const LayoutNotes = ({ children, sidebar }: Props) => {
+
+    return (
+        <div className={css.container}>
+            <div className={css.sidebar}>{sidebar}</div>
+            <div className={css.notesWrapper}>{children}</div>
+
+        </div>
+    )
+}
+
+export default LayoutNotes
